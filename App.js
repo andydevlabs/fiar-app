@@ -79,21 +79,54 @@ const promptUserRental = () => {
     const selectedCar = getCarById(carId);
 
     if (!selectedCar || !selectedCar.isAvailable) {
-        console.log("Invalid or unavailable car selection.");
+        console.log("ATTENTION: Invalid or unavailable car selection.");
         showCarList();
         return promptUserRental();
     }
 
     console.log(`You chose the ${selectedCar.model}.`);
 
-    const days = parseInt(
-        prompt("For how many day(s) would you like to rent the car? ")
-    );
+    let days;
+    let isValidInput = false;
+
+    while (!isValidInput) {
+        const daysInput = prompt(
+            "For how many day(s) would you like to rent the car? "
+        );
+        days = parseInt(daysInput);
+
+        if (isNaN(days) || days <= 0 || daysInput.trim() === "") {
+            console.log(
+                "Please enter a valid number of days (must be a positive number)."
+            );
+        } else if (days > 30) {
+            console.log(
+                "For rentals longer than 30 days, please contact our office directly."
+            );
+        } else {
+            isValidInput = true;
+        }
+    }
+
     const totalPrice = days * selectedCar.pricePerDay;
 
     console.log(`Total price for ${days} day(s): ${totalPrice} ar.`);
 
-    const confirm = prompt(`Do you want to proceed? yes / no: `).toLowerCase();
+    let isValidConfirmation = false;
+    let confirm;
+
+    while (!isValidConfirmation) {
+        confirm = prompt(`Do you want to proceed? yes / no: `)
+            .toLowerCase()
+            .trim();
+
+        if (confirm === "yes" || confirm === "no") {
+            isValidConfirmation = true;
+        } else {
+            console.log("Please enter either 'yes' or 'no'.");
+        }
+    }
+    
     if (confirm !== "yes") {
         console.log("Rental cancelled.");
         return;
