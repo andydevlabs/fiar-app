@@ -14,3 +14,11 @@ export function getAllCars() {
 export function getCarById(id) {
     return carList.find((car) => car.carId === id);
 }
+
+
+export function setCarAvailability(id, availability) {
+    const car = getCarById(id);
+    if (car) {
+        car.isAvailable = availability;
+    }
+}
