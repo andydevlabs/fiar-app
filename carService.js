@@ -10,3 +10,7 @@ const carList = [
 export function getAllCars() {
     return carList;
 }
+
+export function getCarById(id) {
+    return carList.find((car) => car.carId === id);
+}
