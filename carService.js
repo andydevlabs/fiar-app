@@ -22,3 +22,30 @@ export function setCarAvailability(id, availability) {
         car.isAvailable = availability;
     }
 }
+
+export function rentCar(carId, renterName, duration, payment) {
+    const car = getCarById(carId);
+
+    if (!car || !car.isAvailable) {
+        return {
+            success: false,
+            message: "Car is not available or doesn't exist.",
+        };
+    }
+
+    const totalPrice = car.pricePerDay * duration;
+
+    if (payment !== totalPrice) {
+        return {
+            success: false,
+            message: `Incorrect payment. Expected ${totalPrice}, but got ${payment}.`,
+        };
+    }
+
+    setCarAvailability(carId, false);
+
+    return {
+        success: true,
+        message: `Thank you ${renterName} for your payment of ${payment}. You can collect your ${car.model} now.`,
+    };
+}
