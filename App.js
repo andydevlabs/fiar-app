@@ -1,5 +1,5 @@
 import PromptSync from "prompt-sync";
-import { getAllCars } from "./carService.js";
+import { getAllCars, getCarById, rentCar } from "./carService.js";
 
 
 const prompt = PromptSync();
@@ -68,8 +68,43 @@ const showCarList = () => {
     getAllCars().forEach(car => {
         if (car.isAvailable) {
             console.log(
-                `${car.carId} - ${car.model}, ${car.seats} seats, ${car.pricePerDay} ar/day`
+                `${car.carId} - ${car.model}, ${car.seats} seats, ${car.pricePerDay}ar/day`
             );
         }
     });
 }
+
+const promptUserRental = () => {
+    const carId = parseInt(prompt("Choose a car by entering its ID: "));
+    const selectedCar = getCarById(carId);
+
+    if (!selectedCar || !selectedCar.isAvailable) {
+        console.log("Invalid or unavailable car selection.");
+        showCarList();
+        return promptUserRental();
+    }
+
+    console.log(`You chose the ${selectedCar.model}.`);
+
+    const days = parseInt(
+        prompt("For how many day(s) would you like to rent the car? ")
+    );
+    const totalPrice = days * selectedCar.pricePerDay;
+
+    console.log(`Total price for ${days} day(s): ${totalPrice} ar.`);
+
+    const confirm = prompt(`Do you want to proceed? yes / no: `).toLowerCase();
+    if (confirm !== "yes") {
+        console.log("Rental cancelled.");
+        return;
+    }
+
+    const name = prompt("Enter your name: ");
+    const payment = parseInt(prompt("Enter the amount to pay: "));
+
+    const result = rentCar(carId, name, days, payment);
+    console.log(result.message);
+};
+
+showCarList();
+promptUserRental();
