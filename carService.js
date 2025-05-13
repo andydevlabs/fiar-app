@@ -38,7 +38,7 @@ export function rentCar(carId, renterName, duration, payment) {
     if (payment !== totalPrice) {
         return {
             success: false,
-            message: `Incorrect payment. Expected ${totalPrice}, but got ${payment}.`,
+            message: `Incorrect payment. Correct payment ${totalPrice}, but you entered ${payment}.`,
         };
     }
 
@@ -46,6 +46,6 @@ export function rentCar(carId, renterName, duration, payment) {
 
     return {
         success: true,
-        message: `Thank you ${renterName} for your payment of ${payment}. You can collect your ${car.model} now.`,
+        message: `Thank you ${renterName} for your payment of ${payment}ar. You can pick your ${car.model} now.`,
     };
 }

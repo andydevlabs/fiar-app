@@ -1,7 +1,6 @@
 import PromptSync from "prompt-sync";
 import { getAllCars, getCarById, rentCar } from "./carService.js";
 
-
 const prompt = PromptSync();
 
 // const listOfCar = [
@@ -65,14 +64,14 @@ const prompt = PromptSync();
 
 const showCarList = () => {
     console.log("Available cars:");
-    getAllCars().forEach(car => {
+    getAllCars().forEach((car) => {
         if (car.isAvailable) {
             console.log(
                 `${car.carId} - ${car.model}, ${car.seats} seats, ${car.pricePerDay}ar/day`
             );
         }
     });
-}
+};
 
 const promptUserRental = () => {
     const carId = parseInt(prompt("Choose a car by entering its ID: "));
@@ -116,7 +115,7 @@ const promptUserRental = () => {
     let confirm;
 
     while (!isValidConfirmation) {
-        confirm = prompt(`Do you want to proceed? yes / no: `)
+        confirm = prompt(`Do you want to proceed into payment? yes / no: `)
             .toLowerCase()
             .trim();
 
@@ -126,14 +125,40 @@ const promptUserRental = () => {
             console.log("Please enter either 'yes' or 'no'.");
         }
     }
-    
+
     if (confirm !== "yes") {
         console.log("Rental cancelled.");
         return;
     }
 
-    const name = prompt("Enter your name: ");
-    const payment = parseInt(prompt("Enter the amount to pay: "));
+    console.log("Enter your name (Make sure you enter your correct name):");
+    const name = prompt("> ");
+
+    let payment;
+    let isValidPayment = false;
+
+    while (!isValidPayment) {
+        console.log(`Enter the amount to pay (${totalPrice})ar:`);
+        payment = parseInt(prompt("> "));
+
+        if (isNaN(payment) || payment <= 0) {
+            console.log("Please enter a valid amount.");
+        } else if (payment !== totalPrice) {
+            console.log(
+                `Incorrect payment. Correct payment ${totalPrice}, but you entered ${payment}.`
+            );
+
+            const tryAgain = prompt("Would you like to try again? yes / no: ")
+                .toLowerCase()
+                .trim();
+            if (tryAgain !== "yes") {
+                console.log("Rental cancelled.");
+                return;
+            }
+        } else {
+            isValidPayment = true;
+        }
+    }
 
     const result = rentCar(carId, name, days, payment);
     console.log(result.message);
