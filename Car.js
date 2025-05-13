@@ -4,7 +4,7 @@ class Car {
         this.model = model;
         this.seats = seats;
         this.pricePerDay = pricePerDay;
-        this.isAvailable = true;
+        this.isAvailable = isAvailable;
     }
 }
 
